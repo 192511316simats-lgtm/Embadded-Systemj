@@ -1,0 +1,29 @@
+#include <Arduino_FreeRTOS.h>
+
+void Task1(void *pvParameters);
+void Task2(void *pvParameters);
+
+void setup() {
+  Serial.begin(9600);
+
+  xTaskCreate(Task1, "Task1", 128, NULL, 2, NULL);
+  xTaskCreate(Task2, "Task2", 128, NULL, 1, NULL);
+
+  vTaskStartScheduler();
+}
+
+void loop() {}
+
+void Task1(void *pvParameters) {
+  while (1) {
+    Serial.println("Task 1 - High Priority");
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+  }
+}
+
+void Task2(void *pvParameters) {
+  while (1) {
+    Serial.println("Task 2 - Low Priority");
+    vTaskDelay(2000 / portTICK_PERIOD_MS);
+  }
+}
